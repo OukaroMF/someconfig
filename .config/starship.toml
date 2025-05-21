@@ -1,0 +1,28 @@
+# 根据 schema 提供自动补全
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# 在提示符之间插入空行
+add_newline = false
+
+# 自定义提示符符号
+[character]
+success_symbol = "[](fg:black bg:#5BCEFA)[](fg:#5BCEFA bg:#F5A9B8)[](fg:#F5A9B8 bg:#FFFFFF)[](fg:#FFFFFF bg:#F5A9B8)[](fg:#F5A9B8 bg:#5BCEFA)[](#5BCEFA)"
+error_symbol = "[](fg:black bg:red)[](fg:red bg:red)[](red)"
+
+# 禁用 'package' 组件，将其隐藏
+[package]
+disabled = true
+
+# 自定义目录显示
+[directory]
+truncation_length = 0
+truncate_to_repo = false
+
+[conda]
+truncation_length = 0
+
+[os]
+disabled = false
+
+[git_branch]
+format = '[$symbol$branch(:$remote_branch)]($style) '
