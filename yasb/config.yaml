@@ -1,0 +1,268 @@
+watch_stylesheet: true
+watch_config: true
+debug: false
+komorebi:
+  start_command: "komorebic start --whkd"
+  stop_command: "komorebic stop --whkd"
+  reload_command: "komorebic stop --whkd && komorebic start --whkd"
+bars:
+  primary-bar:
+    enabled: true
+    screens: ['*'] 
+    class_name: "yasb-bar"
+    alignment:
+      position: "top"
+      center: true
+    blur_effect:
+      enabled: true 
+      acrylic: true 
+      dark_mode: true
+      round_corners: false
+      border_color: None
+    window_flags:
+      always_on_top: true
+      windows_app_bar: true
+    dimensions:
+      width: "100%"
+      height: 20
+    padding:
+      top: 0
+      left: 0
+      bottom: 0
+      right: 0
+    widgets:
+      left: [
+          # "home",  # 注释掉最左边的菜单
+          # "glazewm_workspaces",  # 注释掉 glazewm
+          "active_window",
+          "clock",
+      ]
+      center: [
+          #"clock",
+        ]
+      right: [
+          "memory",
+          "disk",
+          "weather",
+          "wifi",
+          "volume",
+          "battery",
+          "tray",  # 添加托盘按钮
+          #"tray_menu",
+          "tray_popup",  # 添加托盘弹出窗口
+          #"language"  # 添加语言状态图标
+      ]
+widgets:
+  home:
+    type: "yasb.home.HomeWidget"
+    options:
+      label: "<span>\udb80\udf5c</span>"
+      menu_list:
+        - { title: "Home", path: "~" }
+        - { title: "Downloads", path: "~\\Downloads"}
+        - { title: "Documents", path: "~\\Documents"}
+        - { title: "Pictures", path: "~\\Pictures"}
+        - { title: "Videos", path: "~\\Videos"}
+      system_menu: true
+      power_menu: false
+      blur: true
+      round_corners: true
+      round_corners_type: "small"
+      border_color: "#7aa2f7"
+      alignment: "left"
+      offset_left: 4
+      offset_top: 0
+  glazewm_workspaces:
+    type: "glazewm.workspaces.GlazewmWorkspacesWidget"
+    options:
+      offline_label: "GlazeWM Offline"
+      hide_empty_workspaces: true
+      hide_if_offline: false
+  memory:
+    type: "yasb.memory.MemoryWidget"
+    options:
+      label: "<span>\uf4bc</span> {virtual_mem_outof}"
+      label_alt: "<span>\uf4bc</span> {virtual_mem_outof}"
+      update_interval: 10000
+      callbacks:
+        on_right: "exec cmd /c Taskmgr"
+        on_left: "toggle_visibility"
+  disk:
+    type: "yasb.disk.DiskWidget"
+    options:
+        label: "<span>\uf473</span> disks"
+        label_alt: "<span>\uf473</span>"
+        group_label:
+          volume_labels: ["C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+          show_label_name: false 
+          blur: true
+          round_corners: true
+          round_corners_type: "small"
+          border_color: '#7aa2f7'
+          alignment: 'center'
+          offset_top: 0
+        callbacks:
+          on_left: "toggle_group"
+          on_right: "toggle_visibility"
+  active_window:
+    type: "yasb.active_window.ActiveWindowWidget"
+    options:
+      label: "{win[title]}"
+      label_alt: "[class_name='{win[class_name]}' exe='{win[process][name]}' hwnd={win[hwnd]}]"
+      label_no_window: ""
+      label_icon: true
+      label_icon_size: 10
+      max_length: 50
+      max_length_ellipsis: "..."
+      monitor_exclusive: true
+  clock:
+    type: "yasb.clock.ClockWidget"
+    options:
+      label: "<span>\uf017</span>{ %Y.%m.%d %H:%M:%S }"  # 日期在时间上方
+      label_alt: "<span>\uf017</span>{ %Y.%m.%d %H:%M:%S }"  # 备用显示
+      calendar:
+        round_corners: true
+        round_corners_type: "small"
+        border_color: "#7aa2f7"
+        alignment: "center"
+        offset_top: 0
+  weather:
+    type: "yasb.weather.WeatherWidget"
+    options:
+      label: "<span>{icon}</span> {temp}"
+      label_alt: "{location}: {conditions}, Min {min_temp}, Max {max_temp}, Humidity {humidity}"
+      api_key: '24b6c2cda6d84066b0304531241908'
+      update_interval: 600
+      hide_decimal: true
+      location: "Shenzhen, China"  # 修改为深圳
+      units: "metric"
+      callbacks:
+        on_left: "toggle_card"
+      icons:
+        sunnyDay: "\udb81\udd99"
+        clearNight: "\ue3c2"
+        cloudyDay: "\ue21d"
+        cloudyNight: "\ue226"
+        rainyDay: "\ue371"
+        rainyNight: "\ue371"
+        snowyIcyDay: "\udb81\udf17"
+        snowyIcyNight: "\udb81\udf17"
+        blizzard: "\udb81\udd99"
+        default: "\udb81\udd99"
+      weather_card:
+        blur: true
+        round_corners: true
+        round_corners_type: "small"
+        border_color: "#7aa2f7"
+        alignment: "center"
+        direction: "down"
+        offset_top: 0
+        icon_size: 48
+  wifi:
+    type: "yasb.wifi.WifiWidget"
+    options:
+      label: "<span>{wifi_icon}</span>  {wifi_name}"
+      label_alt: "<span>{wifi_icon}</span> {data[ip]} {wifi_strength}%"
+      # ethernet_label: "<span>{wifi_icon}</span>"  # 注释掉
+      # ethernet_label_alt: "<span>{wifi_icon}</span> {wifi_name}"  # 注释掉
+      ethernet_icon: "\uf108"
+      update_interval: 5000
+      callbacks:
+        on_left: "exec quick_settings"
+        on_middle: "do_nothing"
+        on_right: "toggle_label"
+      wifi_icons: [
+        "\udb82\udd2e",  # Icon for 0% strength
+        "\udb82\udd1f",  # Icon for 1-20% strength
+        "\udb82\udd22",  # Icon for 21-40% strength
+        "\udb82\udd25",  # Icon for 41-80% strength
+        "\udb82\udd28"   # Icon for 81-100% strength
+      ]
+  volume:
+    type: "yasb.volume.VolumeWidget"
+    options:
+      label: "<span>{icon}</span> {level}"
+      label_alt: "{volume}"
+      volume_icons:
+        - "\ueee8"  # Icon for muted
+        - "\uf026"  # Icon for 0-10% volume
+        - "\uf027"  # Icon for 11-30% volume
+        - "\uf027"  # Icon for 31-60% volume
+        - "\uf028"  # Icon for 61-100% volume
+      audio_menu:
+        blur: true
+        round_corners: true
+        round_corners_type: "small"
+        border_color: "#7aa2f7"
+        alignment: "center"
+        direction: "down"
+        offset_top: 0
+      callbacks:
+        on_right: "toggle_mute"
+  battery:
+    type: "yasb.battery.BatteryWidget"
+    options:
+      label: "<span>{icon}</span>{percent}%"
+      label_alt: "<span>{icon}</span> {percent}% | time: {time_remaining}"
+      #hide_unsupported: true
+      charging_options:
+        icon_format: "{charging_icon}" 
+  power_menu:
+    type: "yasb.power_menu.PowerMenuWidget"
+    options:
+      label: "\uf011"
+      uptime: True
+      blur: False
+      blur_background: True
+      animation_duration: 200
+      button_row: 5
+      buttons:
+        shutdown: ["\uf011", "Shut Down"]
+        restart: ["\uead2", "Restart"]
+        signout: ["\udb80\udf43", "Sign out"]
+        hibernate: ["\uf28e", "Hibernate"]
+        sleep: ["\u23fe", "Sleep"]
+        cancel: ["", "Cancel"]
+  tray:
+    type: "yasb.systray.SystrayWidget"  # 托盘小部件
+    options:
+      icon_size: 10  # 托盘图标大小
+  tray_menu:
+    type: "yasb.custom.CustomWidget"  # 使用自定义小部件
+    class_name: "custom-widget"  # 添加必需的 class_name 字段
+    options:
+      label: "<span>\uf0c9</span>"  # 菜单按钮的图标
+      label_alt: "Tray Menu"
+      exec_options:
+        run_cmd: "echo Tray Menu Loaded"
+        run_interval: 60000  # 每分钟更新一次
+        return_format: "json"  # 修改为支持的值
+        hide_empty: false
+      callbacks:
+        on_left: "exec tray_menu_action"  # 左键执行菜单操作
+        on_middle: "exec cmd start control"  # 中键打开控制面板
+        on_right: "exec cmd start https://example.com"  # 右键打开指定网址
+  tray_popup:
+    type: "yasb.custom.CustomWidget"  # 使用自定义小部件
+    class_name: "tray-popup-widget"  # 添加必需的 class_name 字段
+    options:
+      label: "<span>\uf0c9</span> Show Tray"  # 默认显示的图标和文本
+      label_alt: "<span>\uf0c9</span> Hide Tray"  # 切换状态时的文本
+      exec_options:
+        run_cmd: "echo Tray Popup Loaded"  # 示例命令，可替换为实际逻辑
+        run_interval: 60000  # 每分钟更新一次
+        return_format: "json"  # 返回格式
+        hide_empty: false
+      callbacks:
+        on_left: "toggle_label"  # 左键点击切换显示状态
+        on_middle: "exec cmd start taskmgr"  # 中键打开任务管理器
+        on_right: "exec cmd start https://example.com"  # 右键打开指定网址
+  language:
+    type: "yasb.language.LanguageWidget"  # 使用语言小部件
+    options:
+      label: "{lang[layout_name]}"  # 显示当前输入法布局名称
+      label_alt: "{lang[full_layout_name]} ({lang[language_code]}-{lang[country_code]})"  # 显示完整布局名称和语言代码
+      update_interval: 1  # 每秒更新一次
+      callbacks:
+        on_left: "toggle_input_method"  # 点击切换输入法
+        on_right: "exec settings"  # 右键打开输入法设置
