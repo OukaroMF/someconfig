@@ -25,6 +25,7 @@
         buildInputs = [
           pkgs.qt6.qtbase
           pkgs.qt6.qtwayland
+          pkgs.qt6.qtsvg
           pkgs.libglvnd
           pkgs.stdenv.cc.cc.lib
           pkgs.abseil-cpp
@@ -102,12 +103,13 @@
             pkgs.abseil-cpp
             pkgs.qt6.qtbase
             pkgs.qt6.qtwayland
+            pkgs.qt6.qtsvg
             pkgs.fontconfig
             pkgs.freetype
             pkgs.libxkbcommon
             pkgs.xorg.libX11
           ];
-          qtPluginPath = pkgs.lib.makeSearchPath "lib/qt6/plugins" [ pkgs.qt6.qtbase pkgs.qt6.qtwayland ];
+          qtPluginPath = pkgs.lib.makeSearchPath "lib/qt6/plugins" [ pkgs.qt6.qtbase pkgs.qt6.qtwayland pkgs.qt6.qtsvg ];
         in ''
           wrapProgram "$out/bin/vicinae" \
             --prefix LD_LIBRARY_PATH : "$out/lib/compat:${depsLibPath}" \
