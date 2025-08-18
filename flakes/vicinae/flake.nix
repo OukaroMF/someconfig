@@ -7,7 +7,11 @@
 
   outputs = { self, nixpkgs }: let
     systems = [ "x86_64-linux" ];
-    forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f system (import nixpkgs { inherit system; }));
+    forAllSystems =
+      f: nixpkgs.lib.genAttrs systems (system:
+        let pkgs = import nixpkgs { inherit system; };
+        in f system pkgs
+      );
   in {
     packages = forAllSystems (system: pkgs: {
       vicinae = pkgs.stdenvNoCC.mkDerivation {
@@ -46,7 +50,7 @@
           description = "Vicinae prebuilt binary";
           homepage = "https://github.com/vicinaehq/vicinae";
           platforms = [ "x86_64-linux" ];
-          license = licenses.unfree;
+          license = licenses.gpl3Only;
         };
       };
       default = self.packages.${system}.vicinae;
